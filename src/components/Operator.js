@@ -6,14 +6,15 @@ function Operator({ children, state, dispatch }) {
         try {
             if (state.secondOperand !== '') {
                 const result = performOperation(state) + '';
+                const isEqualsSign = children === '=';
                 dispatch({
                     type: 'CALCULATE',
                     display: result,
-                    firstOperand: result,
+                    operator: isEqualsSign ? undefined : children,
+                    firstOperand: isEqualsSign ? '' : result,
                     secondOperand: '',
-                    operator: children,
                 });
-            } else if (state.firstOperand) {
+            } else {
                 dispatch({ type: 'SET_OPERATOR', operator: children });
             }
         } catch (e) {

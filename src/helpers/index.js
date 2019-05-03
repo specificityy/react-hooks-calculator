@@ -1,1 +1,1 @@
-export { formatNumberByLocale, performOperation } from './helpers';
+export { formatNumberByLocale, performOperation, getOperand } from './helpers';

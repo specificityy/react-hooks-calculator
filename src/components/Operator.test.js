@@ -32,12 +32,35 @@ describe('Operator component', () => {
         });
     });
 
-    it('should not dispatch any action if no operands are present', () => {
-        const { wrapper, dispatch } = renderOperator('+', { firstOperand: '', secondOperand: '' });
-        wrapper.simulate('click');
+    describe('when clicking the equals (=) operator', () => {
+        it('should clear the operator and firstOperand value when dispatching the CALCULATE action in order to clear the stage for subsequent calculations', () => {
+            const { wrapper, dispatch } = renderOperator('=', { firstOperand: '5', secondOperand: '1', operator: '-' });
+            wrapper.simulate('click');
 
-        expect(dispatch).not.toHaveBeenCalled();
-    });  
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'CALCULATE',
+                display: '4',
+                firstOperand: '',
+                operator: undefined,
+                secondOperand: '',
+            });
+        });
+    });
+
+    describe('when clicking an operator other than equals', () => {
+        it('should include operator and firstOperand as payload when dispatching the CALCULATE action in order to treat the result as the firstOperand of a subsequent calculation', () => {
+            const { wrapper, dispatch } = renderOperator('+', { firstOperand: '5', secondOperand: '1', operator: '-' });
+            wrapper.simulate('click');
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'CALCULATE',
+                display: '4',
+                firstOperand: '4',
+                operator: '+',
+                secondOperand: '',
+            });
+        });
+    });
 
     it('should dispatch ERROR action in case of exceptions', () => {
         const { wrapper, dispatch } = renderOperator('+');

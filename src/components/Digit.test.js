@@ -14,14 +14,14 @@ describe('Digit component', () => {
         const { wrapper, dispatch } = renderDigit(5, '', {});
         wrapper.simulate('click');
 
-        expect(dispatch).toHaveBeenCalledWith({ type: 'SET_DIGIT', operandKey: 'firstOperand', operandValue: 5 });
+        expect(dispatch).toHaveBeenCalledWith({ type: 'SET_DIGIT', operandValue: 5 });
     });
 
     it('should dispatch DIGIT_CLICK action for secondOperand when operator is present', () => {
         const { wrapper, dispatch } = renderDigit(5, '', { operator: '+' });
         wrapper.simulate('click');
 
-        expect(dispatch).toHaveBeenCalledWith({ type: 'SET_DIGIT', operandKey: 'secondOperand', operandValue: 5 });
+        expect(dispatch).toHaveBeenCalledWith({ type: 'SET_DIGIT', operandValue: 5 });
     });
 });
 

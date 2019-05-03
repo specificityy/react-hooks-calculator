@@ -45,22 +45,38 @@ describe('Reducer', () => {
                 operator: '+',
             });
         });
+
+        it('should assign display value to firstOperand in case the latter is empty, which can happen after clicking the equals sign and then using the result value as the firstOperand of a subsequent operation', () => {
+            expect(reducer({ firstOperand: '', display: '5' }, { type: 'SET_OPERATOR' })).toEqual({
+                display: '5',
+                firstOperand: '5',
+            });
+        });
     });
 
     describe('TOGGLE_PLUS_MINUS', () => {
-        it('should toggle plus minus on firstOperand when there is no secondOperand present', () => {
-            expect(reducer({ firstOperand: '5', secondOperand: '' }, { type: 'TOGGLE_PLUS_MINUS' })).toEqual({
+        it('should toggle plus minus on firstOperand when there is no operator', () => {
+            expect(reducer({ firstOperand: '5', operator: undefined }, { type: 'TOGGLE_PLUS_MINUS' })).toEqual({
                 display: '-5',
                 firstOperand: '-5',
-                secondOperand: '',
             });
         });
 
-        it('should toggle plus minus on secondOperand when present', () => {
-            expect(reducer({ firstOperand: '5', secondOperand: '5' }, { type: 'TOGGLE_PLUS_MINUS' })).toEqual({
+        it('should toggle plus minus on secondOperand when there is an operator', () => {
+            expect(
+                reducer({ firstOperand: '5', operator: '+', secondOperand: '5' }, { type: 'TOGGLE_PLUS_MINUS' }),
+            ).toEqual({
                 display: '-5',
+                operator: '+',
                 firstOperand: '5',
                 secondOperand: '-5',
+            });
+        });
+
+        it('should assign display value to firstOperand in case the latter is empty, which can happen after clicking the equals sign and then plus-minus in order to toggle the result value', () => {
+            expect(reducer({ firstOperand: '', display: '5' }, { type: 'TOGGLE_PLUS_MINUS' })).toEqual({
+                display: '-5',
+                firstOperand: '-5',
             });
         });
     });

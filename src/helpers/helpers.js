@@ -21,4 +21,8 @@ function formatNumberByLocale(value) {
     return Number(value).toLocaleString(window.navigator.language || 'en-GB', {});
 }
 
-export { performOperation, formatNumberByLocale };
+function getOperand({ operator }) {
+    return !operator ? 'firstOperand' : 'secondOperand';
+}
+
+export { performOperation, formatNumberByLocale, getOperand };

@@ -1,4 +1,4 @@
-import { formatNumberByLocale } from '../helpers';
+import { formatNumberByLocale, getOperand } from '../helpers';
 
 export const initialState = {
     firstOperand: '',
@@ -11,31 +11,36 @@ export const initialState = {
 function reducer(state = initialState, action) {
     switch (action.type) {
         case 'SET_DIGIT':
+            const operandKey = getOperand(state);
             let valueToAppend = action.operandValue;
             if (valueToAppend === '.') {
                 valueToAppend = /\./.test(state.display) ? '' : valueToAppend;
-                valueToAppend = state.display === '0' ? '0.' : valueToAppend;
+                valueToAppend = state[operandKey] === '' ? '0.' : valueToAppend;
             }
 
-            const nextValue = state[action.operandKey] + valueToAppend;
+            const nextValue = state[operandKey] + valueToAppend;
 
             return {
                 ...state,
-                [action.operandKey]: nextValue,
+                [operandKey]: nextValue,
                 display: formatNumberByLocale(nextValue),
                 clearLabel: 'C',
             };
 
         case 'SET_OPERATOR':
-            return { ...state, operator: action.operator };
+            return {
+                ...state,
+                operator: action.operator,
+                firstOperand: state.firstOperand === '' ? state.display : state.firstOperand,
+            };
 
         case 'TOGGLE_PLUS_MINUS':
-            const operandKey = state.secondOperand !== '' ? 'secondOperand' : 'firstOperand';
-            const signedValue = Number(state[operandKey]) * -1 + '';
+            const operand = getOperand(state);
+            const signedValue = Number(state[operand] || state.display) * -1 + '';
 
             return {
                 ...state,
-                [operandKey]: signedValue,
+                [operand]: signedValue,
                 display: formatNumberByLocale(signedValue),
             };
 
