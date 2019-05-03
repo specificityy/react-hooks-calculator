@@ -1,32 +1,25 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Digit from './Digit';
+import FunctionKey from './FunctionKey';
 
-describe('Digit component', () => {
-    it('should render digit and add className', () => {
-        const { wrapper } = renderDigit(5, 'foobar');
+describe('FunctionKey component', () => {
+    it('should render function key and className', () => {
+        const { wrapper } = renderFunctionKey('AC', 'foobar');
 
-        expect(wrapper.text()).toBe('5');
+        expect(wrapper.text()).toBe('AC');
         expect(wrapper.is('.foobar')).toBe(true);
     });
 
-    it('should dispatch DIGIT_CLICK action for firstOperand when there is no operator', () => {
-        const { wrapper, dispatch } = renderDigit(5, '', {});
+    it('should dispatch passed action type', () => {
+        const { wrapper, dispatch } = renderFunctionKey('AC', '', 'FOO_BAR');
         wrapper.simulate('click');
 
-        expect(dispatch).toHaveBeenCalledWith({ type: 'DIGIT_CLICK', operandKey: 'firstOperand', operandValue: 5 });
-    });
-
-    it('should dispatch DIGIT_CLICK action for secondOperand when operator is present', () => {
-        const { wrapper, dispatch } = renderDigit(5, '', { operator: '+' });
-        wrapper.simulate('click');
-
-        expect(dispatch).toHaveBeenCalledWith({ type: 'DIGIT_CLICK', operandKey: 'secondOperand', operandValue: 5 });
+        expect(dispatch).toHaveBeenCalledWith({ type: 'FOO_BAR' });
     });
 });
 
-function renderDigit(children, className, state) {
-    const props = { children, className, state, dispatch: jest.fn() };
-    const wrapper = shallow(<Digit {...props} />).find('button');
+function renderFunctionKey(children, className, type) {
+    const props = { children, className, type, dispatch: jest.fn() };
+    const wrapper = shallow(<FunctionKey {...props} />).find('button');
     return { wrapper, dispatch: props.dispatch };
 }

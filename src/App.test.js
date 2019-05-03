@@ -39,7 +39,7 @@ describe('App component', () => {
         const wrapper = mount(<App />);
 
         wrapper
-            .find('.digit')
+            .find('Digit')
             .first()
             .simulate('click');
 

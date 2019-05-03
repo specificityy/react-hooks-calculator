@@ -1,7 +1,7 @@
 import React from 'react';
 import { performOperation } from '../helpers';
 
-function Operator({ children, onClick, state, dispatch }) {
+function Operator({ children, state, dispatch }) {
     function handleClick() {
         try {
             if (state.secondOperand !== '') {
@@ -14,7 +14,7 @@ function Operator({ children, onClick, state, dispatch }) {
                     operator: children,
                 });
             } else if (state.firstOperand) {
-                dispatch({ type: 'OPERATOR_CLICK', operator: children });
+                dispatch({ type: 'SET_OPERATOR', operator: children });
             }
         } catch (e) {
             dispatch({ type: 'ERROR' });

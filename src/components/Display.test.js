@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import Display from './Display';
 
-describe('Digit component', () => {
+describe('Display component', () => {
     it('should render logo and display', () => {
       const wrapper = shallow(<Display>5</Display>);
 

@@ -23,10 +23,10 @@ function App() {
             <Display>{state.display}</Display>
 
             <div className="keys">
-                <FunctionKey type="CLEAR_CLICK" className="two-columns">
+                <FunctionKey type="CLEAR" className="two-columns">
                     {state.clearLabel}
                 </FunctionKey>
-                <FunctionKey type="PLUS_MINUS_CLICK">±</FunctionKey>
+                <FunctionKey type="SET_PLUS_MINUS">±</FunctionKey>
                 <Operator>÷</Operator>
 
                 <Digit>7</Digit>

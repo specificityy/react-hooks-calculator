@@ -1,12 +1,12 @@
 import React from 'react';
 
 function FunctionKey({ children, className = '', dispatch, type }) {
-    function handleClearClick() {
+    function handleClick() {
         dispatch({ type });
     }
 
     return (
-        <button onClick={handleClearClick} className={`function-key ${className}`}>
+        <button onClick={handleClick} className={`function-key ${className}`}>
             {children}
         </button>
     );

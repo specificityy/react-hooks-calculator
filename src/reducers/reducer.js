@@ -1,69 +1,69 @@
 import { formatNumberByLocale } from '../helpers';
 
 export const initialState = {
-    firstOperand: '',
-    secondOperand: '',
-    operator: undefined,
-    display: '0',
-    clearLabel: 'AC',
+  firstOperand: '',
+  secondOperand: '',
+  operator: undefined,
+  display: '0',
+  clearLabel: 'AC',
 };
 
 function reducer(state = initialState, action) {
-    switch (action.type) {
-        case 'DIGIT_CLICK':
-            let valueToAppend = action.operandValue;
-            if (valueToAppend === '.') {
-                valueToAppend = /\./.test(state.display) ? '' : valueToAppend;
-                valueToAppend = state.display === '0' ? '0.' : valueToAppend;
-            }
+  switch (action.type) {
+    case 'SET_DIGIT':
+      let valueToAppend = action.operandValue;
+      if (valueToAppend === '.') {
+        valueToAppend = /\./.test(state.display) ? '' : valueToAppend;
+        valueToAppend = state.display === '0' ? '0.' : valueToAppend;
+      }
 
-            const nextValue = state[action.operandKey] + valueToAppend;
+      const nextValue = state[action.operandKey] + valueToAppend;
 
-            return {
-                ...state,
-                [action.operandKey]: nextValue,
-                display: formatNumberByLocale(nextValue),
-                clearLabel: 'C',
-            };
+      return {
+        ...state,
+        [action.operandKey]: nextValue,
+        display: formatNumberByLocale(nextValue),
+        clearLabel: 'C',
+      };
 
-        case 'OPERATOR_CLICK':
-            return { ...state, operator: action.operator };
+    case 'SET_OPERATOR':
+      return { ...state, operator: action.operator };
 
-        case 'PLUS_MINUS_CLICK':
-            const operandKey = state.secondOperand !== '' ? 'secondOperand' : 'firstOperand';
-            const signedValue = Number(state[operandKey]) * -1 + '';
+    case 'SET_PLUS_MINUS':
+      const operandKey =
+        state.secondOperand !== '' ? 'secondOperand' : 'firstOperand';
+      const signedValue = Number(state[operandKey]) * -1 + '';
 
-            return {
-                ...state,
-                [operandKey]: signedValue,
-                display: formatNumberByLocale(signedValue),
-            };
+      return {
+        ...state,
+        [operandKey]: signedValue,
+        display: formatNumberByLocale(signedValue),
+      };
 
-        case 'CLEAR_CLICK':
-            const newState = { clearLabel: 'AC' };
+    case 'CLEAR':
+      const newState = { clearLabel: 'AC' };
 
-            if (state.secondOperand !== '') {
-                newState.firstOperand = state.firstOperand;
-                newState.operator = state.operator;
-            } else if (state.operator) {
-                newState.firstOperand = state.firstOperand;
-                newState.display = state.display;
-            }
+      if (state.secondOperand !== '') {
+        newState.firstOperand = state.firstOperand;
+        newState.operator = state.operator;
+      } else if (state.operator) {
+        newState.firstOperand = state.firstOperand;
+        newState.display = state.display;
+      }
 
-            return {
-                ...initialState,
-                ...newState,
-            };
+      return {
+        ...initialState,
+        ...newState,
+      };
 
-        case 'CALCULATE':
-            const { type, display, ...rest } = action;
-            rest.operator = rest.operator === '=' ? undefined : rest.operator;
-            return { ...state, display: formatNumberByLocale(display), ...rest };
-        case 'ERROR':
-            return { ...state, display: 'Error' };
-        default:
-            return state;
-    }
+    case 'CALCULATE':
+      const { type, display, ...rest } = action;
+      return { ...state, display: formatNumberByLocale(display), ...rest };
+    case 'ERROR':
+      return { ...state, display: 'Error' };
+    default:
+      return state;
+  }
 }
 
 export default reducer;
