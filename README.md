@@ -1,3 +1,38 @@
+## Test Completion
+
+See it live at [http://thanos-blocks-brexit.surge.sh/](http://thanos-blocks-brexit.surge.sh/)
+
+### Scope
+
+My goal was to make something similar to the calculator on macOS with the 4 basic arithmetic operations.
+
+### Tech Stack
+
+- React with the `useReducer` hook.
+- The app was bootstrapped with `create-react-app` in order to save time setting up the boilerplate, build and bundling.
+- ES6/7
+- jest and enzyme for testing.
+
+### With more time I would've liked to
+
+- Add PropTypes + eslint or even TypeScript/Flow
+- Make it responsive: maybe have it expand to the full viewport on a mobile
+- Make the display font responsive: having its size decrease as to fit all digits in the display
+- Have better error handling, like displaying specific errors for division by 0, validation around the max number that can possibly be displayed or limit the decimal places
+- Add e2e with Cypress for the critical paths, like a add a test where a user: clicks a digit, then an operator, another digit, another operator; and assert the display shows the expected result.
+- Add keyboard event listeners
+- Add a feature to continue to sum up values while pressing the equals sign
+- Add some visual feedback when pressing an operator
+- Add an audit trail to have a historical visual feedback of the operations performed
+- Do more exploratory testing in search of potential bugs
+- Look at performance and make sure it only triggers rendering when necessary, maybe try `React.memo`
+- Add some testing utilities in order to remove duplication, in order to abstract things like the `render` helper function I have at the bottom of every component test file
+
+
+`Version 627d7be039e0085025a51d47e42bdd970409ec1c`
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -26,43 +61,3 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
