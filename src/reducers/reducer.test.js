@@ -1,73 +1,119 @@
-const initialState = {
-  firstOperand: '',
-  secondOperand: '',
-  operator: undefined,
-  display: '0',
-  clearLabel: 'AC',
-};
+import { reducer } from './';
 
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case 'DIGIT_CLICK':
-      let valueToAppend = action.operandValue;
-      if (valueToAppend === '.') {
-        valueToAppend = /\./.test(state.display) ? '' : valueToAppend;
-        valueToAppend = state.display === '0' ? '0.' : valueToAppend;
-      }
+describe('Reducer', () => {
+    describe('SET_DIGIT', () => {
+        it('should set passed operand and clearLabel', () => {
+            expect(
+                reducer({ firstOperand: '' }, { type: 'SET_DIGIT', operandKey: 'firstOperand', operandValue: '5' }),
+            ).toEqual({
+                firstOperand: '5',
+                display: '5',
+                clearLabel: 'C',
+            });
+        });
 
-      const nextValue = state[action.operandKey] + valueToAppend;
+        it('should not append more than one dot', () => {
+            expect(
+                reducer(
+                    { firstOperand: '5.5', display: '5.5' },
+                    { type: 'SET_DIGIT', operandKey: 'firstOperand', operandValue: '.' },
+                ),
+            ).toEqual({
+                firstOperand: '5.5',
+                display: '5.5',
+                clearLabel: 'C',
+            });
+        });
 
-      return {
-        ...state,
-        [action.operandKey]: nextValue,
-        display: formatNumberByLocale(nextValue),
-        clearLabel: 'C',
-      };
+        it('should append dot after 0 when there is no firstOperand yet', () => {
+            expect(
+                reducer(
+                    { firstOperand: '', display: '0' },
+                    { type: 'SET_DIGIT', operandKey: 'firstOperand', operandValue: '.' },
+                ),
+            ).toMatchObject({
+                firstOperand: '0.',
+                display: '0.',
+                clearLabel: 'C',
+            });
+        });
+    });
 
-    case 'OPERATOR_CLICK':
-      return { ...state, operator: action.operator };
+    describe('SET_OPERATOR', () => {
+        it('should set operator', () => {
+            expect(reducer({}, { type: 'SET_OPERATOR', operator: '+' })).toEqual({
+                operator: '+',
+            });
+        });
+    });
 
-    case 'PLUS_MINUS_CLICK':
-      const operandKey =
-        state.secondOperand !== '' ? 'secondOperand' : 'firstOperand';
-      const signedValue = Number(state[operandKey]) * -1 + '';
+    describe('TOGGLE_PLUS_MINUS', () => {
+        it('should toggle plus minus on firstOperand when there is no secondOperand present', () => {
+            expect(reducer({ firstOperand: '5', secondOperand: '' }, { type: 'TOGGLE_PLUS_MINUS' })).toEqual({
+                display: '-5',
+                firstOperand: '-5',
+                secondOperand: '',
+            });
+        });
 
-      return {
-        ...state,
-        [operandKey]: signedValue,
-        display: formatNumberByLocale(signedValue),
-      };
+        it('should toggle plus minus on secondOperand when present', () => {
+            expect(reducer({ firstOperand: '5', secondOperand: '5' }, { type: 'TOGGLE_PLUS_MINUS' })).toEqual({
+                display: '-5',
+                firstOperand: '5',
+                secondOperand: '-5',
+            });
+        });
+    });
 
-    case 'CLEAR_CLICK':
-      const newState = { clearLabel: 'AC' };
+    describe('CLEAR', () => {
+        it('should set label to AC', () => {
+            expect(reducer({}, { type: 'CLEAR' })).toMatchObject({
+                clearLabel: 'AC',
+            });
+        });
 
-      if (state.secondOperand !== '') {
-        newState.firstOperand = state.firstOperand;
-        newState.operator = state.operator;
-      } else if (state.operator) {
-        newState.firstOperand = state.firstOperand;
-        newState.display = state.display;
-      }
+        it('should only remove secondOperand if present', () => {
+            expect(reducer({ firstOperand: '5', secondOperand: '5', operator: '+' }, { type: 'CLEAR' })).toEqual({
+                firstOperand: '5',
+                secondOperand: '',
+                display: '0',
+                operator: '+',
+                clearLabel: 'AC',
+            });
+        });
 
-      return {
-        ...initialState,
-        ...newState,
-      };
+        it('should only remove operator if present and secondOperand is not present', () => {
+            expect(reducer({ firstOperand: '5', secondOperand: '', operator: '+' }, { type: 'CLEAR' })).toEqual({
+                firstOperand: '5',
+                secondOperand: '',
+                operator: undefined,
+                clearLabel: 'AC',
+            });
+        });
 
-    case 'EQUALS_CLICK':
-      return { ...state };
-    case 'CALCULATE':
-      const { type, display, ...rest } = action;
-      return { ...state, display: formatNumberByLocale(display), ...rest };
-    case 'ERROR':
-      return { ...state, display: 'Error' };
-    default:
-      return state;
-  }
-}
+        it('should remove firstOperand if there is no operator or secondOperand', () => {
+            expect(reducer({ firstOperand: '5', secondOperand: '', operator: '' }, { type: 'CLEAR' })).toEqual({
+                firstOperand: '',
+                secondOperand: '',
+                display: '0',
+                clearLabel: 'AC',
+            });
+        });
+    });
 
-function formatNumberByLocale(value) {
-  return Number(value).toLocaleString(window.navigator.language || 'en-GB', {});
-}
+    describe('CALCULATE', () => {
+        it('should set the calculated value in the display', () => {
+            expect(reducer({}, { type: 'CALCULATE', display: '2000000' })).toEqual({
+                display: '2,000,000',
+            });
+        });
+    });
 
-export default reducer;
+    describe('ERROR', () => {
+        it('should set the display to Error', () => {
+            expect(reducer({}, { type: 'ERROR' })).toEqual({
+                display: 'Error',
+            });
+        });
+    });
+});

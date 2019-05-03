@@ -26,7 +26,7 @@ function App() {
                 <FunctionKey type="CLEAR" className="two-columns">
                     {state.clearLabel}
                 </FunctionKey>
-                <FunctionKey type="SET_PLUS_MINUS">±</FunctionKey>
+                <FunctionKey type="TOGGLE_PLUS_MINUS">±</FunctionKey>
                 <Operator>÷</Operator>
 
                 <Digit>7</Digit>
