@@ -36,11 +36,11 @@ button {
 
   font-size: 2rem;
   color: #333;
-  transition: opacity 180ms ease-out;
+  outline: none;
 }
 
-button:hover {
-  opacity: 0.85;
+button:active {
+  box-shadow: inset 0px 0px 80px 0px rgba(0, 0, 0, 0.25);
 }
 
 .function-key {
@@ -51,7 +51,7 @@ button:hover {
   );
 }
 
-.operand {
+.operator {
   background: linear-gradient(
     to bottom,
     rgba(252, 156, 23, 1) 0%,

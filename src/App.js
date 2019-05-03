@@ -1,55 +1,55 @@
-import React from 'react';
-import logo from './logo.png';
+import React, { useReducer } from 'react';
+
+import { reducer, initialState } from './reducers';
+
+import Display from './components/Display';
+import digit from './components/Digit';
+import operator from './components/Operator';
+import functionKey from './components/FunctionKey';
+
 import './App.css';
 
-function Digit({ children, className = '' }) {
-  return <button className={`digit ${className}`}>{children}</button>;
-}
-
-function Operand({ children }) {
-  return <button className="operand">{children}</button>;
-}
-
-function FunctionKey({ children, className = '' }) {
-  return <button className={`function-key ${className}`}>{children}</button>;
-}
-
-function Display({ children }) {
-  return <div className="display">{children}</div>;
-}
-
 function App() {
-  return (
-    <div className="calculator">
-      <img src={logo} alt="logo" width="200" />
-      <Display>0.00</Display>
+    const [state, dispatch] = useReducer(reducer, initialState);
 
-      <div className="keys">
-        <FunctionKey className="two-columns">AC</FunctionKey>
-        <FunctionKey>±</FunctionKey>
-        <Operand>÷</Operand>
+    const wrapper = (Component, props) => <Component {...props} state={state} dispatch={dispatch} />;
 
-        <Digit>7</Digit>
-        <Digit>8</Digit>
-        <Digit>9</Digit>
-        <Operand>×</Operand>
+    const Digit = props => wrapper(digit, props);
+    const Operator = props => wrapper(operator, props);
+    const FunctionKey = props => wrapper(functionKey, props);
 
-        <Digit>4</Digit>
-        <Digit>5</Digit>
-        <Digit>6</Digit>
-        <Operand>-</Operand>
+    return (
+        <div className="calculator">
+            <Display>{state.display}</Display>
 
-        <Digit>1</Digit>
-        <Digit>2</Digit>
-        <Digit>3</Digit>
-        <Operand>+</Operand>
+            <div className="keys">
+                <FunctionKey type="CLEAR_CLICK" className="two-columns">
+                    {state.clearLabel}
+                </FunctionKey>
+                <FunctionKey type="PLUS_MINUS_CLICK">±</FunctionKey>
+                <Operator>÷</Operator>
 
-        <Digit className="two-columns">0</Digit>
-        <Digit>.</Digit>
-        <Operand>=</Operand>
-      </div>
-    </div>
-  );
+                <Digit>7</Digit>
+                <Digit>8</Digit>
+                <Digit>9</Digit>
+                <Operator>×</Operator>
+
+                <Digit>4</Digit>
+                <Digit>5</Digit>
+                <Digit>6</Digit>
+                <Operator>-</Operator>
+
+                <Digit>1</Digit>
+                <Digit>2</Digit>
+                <Digit>3</Digit>
+                <Operator>+</Operator>
+
+                <Digit className="two-columns">0</Digit>
+                <Digit>.</Digit>
+                <Operator>=</Operator>
+            </div>
+        </div>
+    );
 }
 
 export default App;
